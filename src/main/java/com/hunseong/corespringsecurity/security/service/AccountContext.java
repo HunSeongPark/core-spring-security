@@ -1,6 +1,7 @@
 package com.hunseong.corespringsecurity.security.service;
 
 import com.hunseong.corespringsecurity.domain.Account;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -9,6 +10,7 @@ import java.util.Collection;
 /**
  * Created by Hunseong on 2022/06/05
  */
+@Getter
 public class AccountContext extends User {
 
     private final Account account;
