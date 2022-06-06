@@ -1,13 +1,10 @@
 package com.hunseong.corespringsecurity.security.provider;
 
-import com.hunseong.corespringsecurity.security.common.FormWebAuthenticationDetails;
 import com.hunseong.corespringsecurity.security.service.AccountContext;
 import com.hunseong.corespringsecurity.security.token.AjaxAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -42,6 +39,6 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return AjaxAuthenticationToken.class.isAssignableFrom(authentication);
+        return authentication.equals(AjaxAuthenticationToken.class);
     }
 }

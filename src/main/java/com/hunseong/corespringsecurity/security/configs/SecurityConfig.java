@@ -1,11 +1,14 @@
 package com.hunseong.corespringsecurity.security.configs;
 
+import com.hunseong.corespringsecurity.security.handler.FormAuthenticationFailureHandler;
+import com.hunseong.corespringsecurity.security.handler.FormAuthenticationSuccessHandler;
 import com.hunseong.corespringsecurity.security.provider.FormAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -24,10 +27,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final FormAuthenticationProvider formAuthenticationProvider;
+    private final AuthenticationProvider formAuthenticationProvider;
     private final AuthenticationDetailsSource authenticationDetailsSource;
-    private final AuthenticationSuccessHandler authenticationSuccessHandler;
-    private final AuthenticationFailureHandler authenticationFailureHandler;
+    private final AuthenticationSuccessHandler formAuthenticationSuccessHandler;
+    private final AuthenticationFailureHandler formAuthenticationFailureHandler;
     private final AccessDeniedHandler accessDeniedHandler;
 
 
@@ -57,8 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .loginProcessingUrl("/login_proc")
                 .authenticationDetailsSource(authenticationDetailsSource)
-                .successHandler(authenticationSuccessHandler)
-                .failureHandler(authenticationFailureHandler)
+                .successHandler(formAuthenticationSuccessHandler)
+                .failureHandler(formAuthenticationFailureHandler)
                 .permitAll();
 
         http.exceptionHandling()
