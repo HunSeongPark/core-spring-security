@@ -1,9 +1,6 @@
 package com.hunseong.corespringsecurity.security.configs;
 
 import com.hunseong.corespringsecurity.security.filter.AjaxLoginProcessingFilter;
-import com.hunseong.corespringsecurity.security.handler.AjaxAuthenticationFailureHandler;
-import com.hunseong.corespringsecurity.security.handler.AjaxAuthenticationSuccessHandler;
-import com.hunseong.corespringsecurity.security.provider.AjaxAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +10,8 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -28,6 +27,8 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthenticationProvider ajaxAuthenticationProvider;
     private final AuthenticationSuccessHandler ajaxAuthenticationSuccessHandler;
     private final AuthenticationFailureHandler ajaxAuthenticationFailureHandler;
+    private final AuthenticationEntryPoint ajaxLoginAuthenticationEntryPoint;
+    private final AccessDeniedHandler ajaxAccessDeniedHandler;
 
     @Bean
     public AjaxLoginProcessingFilter ajaxLoginProcessingFilter() throws Exception {
@@ -53,10 +54,16 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .antMatcher("/api/**")
                 .authorizeRequests()
+                .antMatchers("/api/messages").hasRole("MANAGER")
                 .anyRequest().authenticated()
 
                 .and()
                 .addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        http
+                .exceptionHandling()
+                .authenticationEntryPoint(ajaxLoginAuthenticationEntryPoint)
+                .accessDeniedHandler(ajaxAccessDeniedHandler);
 
         http.csrf().disable();
     }

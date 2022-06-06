@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthenticationDetailsSource authenticationDetailsSource;
     private final AuthenticationSuccessHandler formAuthenticationSuccessHandler;
     private final AuthenticationFailureHandler formAuthenticationFailureHandler;
-    private final AccessDeniedHandler accessDeniedHandler;
+    private final AccessDeniedHandler formAccessDeniedHandler;
 
 
     // 정적 파일(css, js, image, ..)에 대한 보안 필터 ignore 설정
@@ -65,6 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
         http.exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler);
+                .accessDeniedHandler(formAccessDeniedHandler);
     }
 }
