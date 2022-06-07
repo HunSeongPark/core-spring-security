@@ -1,6 +1,8 @@
 package com.hunseong.corespringsecurity.security.configs;
 
+import com.hunseong.corespringsecurity.security.factory.UrlResourcesMapFactoryBean;
 import com.hunseong.corespringsecurity.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
+import com.hunseong.corespringsecurity.security.service.SecurityResourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +26,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by Hunseong on 2022/06/05
@@ -39,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthenticationSuccessHandler formAuthenticationSuccessHandler;
     private final AuthenticationFailureHandler formAuthenticationFailureHandler;
     private final AccessDeniedHandler formAccessDeniedHandler;
+    private final SecurityResourceService securityResourceService;
 
 
     // 정적 파일(css, js, image, ..)에 대한 보안 필터 ignore 설정
@@ -93,6 +97,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public FilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource() {
-        return new UrlFilterInvocationSecurityMetadataSource();
+        return new UrlFilterInvocationSecurityMetadataSource(urlResourceMapFactoryBean().getObject());
+    }
+
+    private UrlResourcesMapFactoryBean urlResourceMapFactoryBean() {
+        UrlResourcesMapFactoryBean urlResourcesMapFactoryBean = new UrlResourcesMapFactoryBean();
+        urlResourcesMapFactoryBean.setSecurityResourceService(securityResourceService);
+        return urlResourcesMapFactoryBean;
     }
 }
