@@ -1,7 +1,9 @@
 package com.hunseong.corespringsecurity.controller.user;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -16,8 +18,8 @@ public class MessageController {
     }
 
     @ResponseBody
-    @GetMapping("/api/messages")
-    public String apiMessage() {
-        return "messages_ok";
+    @PostMapping("/api/messages")
+    public ResponseEntity<String> apiMessage() {
+        return ResponseEntity.ok("message_ok");
     }
 }
