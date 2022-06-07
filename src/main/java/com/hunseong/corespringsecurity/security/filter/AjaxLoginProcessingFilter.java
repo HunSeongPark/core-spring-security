@@ -1,13 +1,12 @@
 package com.hunseong.corespringsecurity.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hunseong.corespringsecurity.domain.AccountDto;
+import com.hunseong.corespringsecurity.domain.dto.AccountDto;
 import com.hunseong.corespringsecurity.security.token.AjaxAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletException;

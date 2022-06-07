@@ -1,7 +1,7 @@
 package com.hunseong.corespringsecurity.controller.user;
 
 import com.hunseong.corespringsecurity.domain.Account;
-import com.hunseong.corespringsecurity.domain.AccountDto;
+import com.hunseong.corespringsecurity.domain.dto.AccountDto;
 import com.hunseong.corespringsecurity.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,11 +21,6 @@ public class UserController {
 
     private final PasswordEncoder passwordEncoder;
 
-    @GetMapping("/mypage")
-    public String myPage() {
-        return "user/mypage";
-    }
-
     @GetMapping("/users")
     public String createUser() {
         return "user/login/register";
@@ -38,5 +33,10 @@ public class UserController {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         userService.createUser(account);
         return "redirect:/";
+    }
+
+    @GetMapping("/mypage")
+    public String myPage() {
+        return "user/mypage";
     }
 }
