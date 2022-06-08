@@ -1,6 +1,7 @@
 package com.hunseong.corespringsecurity.security.configs;
 
 import com.hunseong.corespringsecurity.security.factory.UrlResourcesMapFactoryBean;
+import com.hunseong.corespringsecurity.security.filter.PermitAllFilter;
 import com.hunseong.corespringsecurity.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
 import com.hunseong.corespringsecurity.security.service.SecurityResourceService;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AccessDeniedHandler formAccessDeniedHandler;
     private final SecurityResourceService securityResourceService;
 
+    private final String[] permitAllResources = {"/", "/login", "/user/login/**"};
+
 
     // 정적 파일(css, js, image, ..)에 대한 보안 필터 ignore 설정
     @Override
@@ -75,16 +78,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling()
                 .accessDeniedHandler(formAccessDeniedHandler)
                 .and()
-                .addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class);
+                .addFilterBefore(permitAllFilter(), FilterSecurityInterceptor.class);
     }
 
     @Bean
-    public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
-        FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
-        filterSecurityInterceptor.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource());
-        filterSecurityInterceptor.setAccessDecisionManager(affirmativeBased());
-        filterSecurityInterceptor.setAuthenticationManager(authenticationManagerBean());
-        return filterSecurityInterceptor;
+    public PermitAllFilter permitAllFilter() throws Exception {
+        PermitAllFilter permitAllFilter = new PermitAllFilter(permitAllResources);
+        permitAllFilter.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource());
+        permitAllFilter.setAccessDecisionManager(affirmativeBased());
+        permitAllFilter.setAuthenticationManager(authenticationManagerBean());
+        return permitAllFilter;
     }
 
     private AccessDecisionManager affirmativeBased() {
@@ -97,7 +100,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public FilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource() {
-        return new UrlFilterInvocationSecurityMetadataSource(urlResourceMapFactoryBean().getObject());
+        return new UrlFilterInvocationSecurityMetadataSource(
+                urlResourceMapFactoryBean().getObject(),
+                securityResourceService
+                );
     }
 
     private UrlResourcesMapFactoryBean urlResourceMapFactoryBean() {

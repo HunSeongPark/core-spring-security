@@ -4,6 +4,7 @@ import com.hunseong.corespringsecurity.domain.Resources;
 import com.hunseong.corespringsecurity.domain.Role;
 import com.hunseong.corespringsecurity.domain.dto.ResourcesDto;
 import com.hunseong.corespringsecurity.repository.RoleRepository;
+import com.hunseong.corespringsecurity.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
 import com.hunseong.corespringsecurity.service.ResourcesService;
 import com.hunseong.corespringsecurity.service.RoleService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class ResourcesController {
     private final ResourcesService resourcesService;
     private final RoleRepository roleRepository;
     private final RoleService roleService;
+    private final UrlFilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;
 
     @GetMapping("/admin/resources")
     public String resources(Model model) {
@@ -51,6 +53,7 @@ public class ResourcesController {
         resources.setRoleSet(roles);
 
         resourcesService.createResources(resources);
+        filterInvocationSecurityMetadataSource.reload();
         return "redirect:/admin/resources";
     }
 
@@ -86,6 +89,7 @@ public class ResourcesController {
     @GetMapping(value="/admin/resources/delete/{id}")
     public String removeResources(@PathVariable Long id) {
         resourcesService.deleteResources(id);
+        filterInvocationSecurityMetadataSource.reload();
         return "redirect:/admin/resources";
     }
 }
