@@ -1,11 +1,9 @@
 package com.hunseong.corespringsecurity.controller;
 
+import com.hunseong.corespringsecurity.domain.AccessIp;
 import com.hunseong.corespringsecurity.domain.Role;
 import com.hunseong.corespringsecurity.domain.RoleHierarchy;
-import com.hunseong.corespringsecurity.repository.ResourcesRepository;
-import com.hunseong.corespringsecurity.repository.RoleHierarchyRepository;
-import com.hunseong.corespringsecurity.repository.RoleRepository;
-import com.hunseong.corespringsecurity.repository.UserRepository;
+import com.hunseong.corespringsecurity.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -38,6 +36,9 @@ public class SetupDataLoader {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private AccessIpRepository accessIpRepository;
+
     private static AtomicInteger count = new AtomicInteger(0);
 
     @Transactional
@@ -48,6 +49,18 @@ public class SetupDataLoader {
 //        createRoleHierarchyIfNotFound(managerRole, adminRole);
 //        createRoleHierarchyIfNotFound(userRole, managerRole);
         update();
+        setupAccessIpData();
+    }
+
+    private void setupAccessIpData() {
+        AccessIp accessIp = accessIpRepository.findByIpAddress("0:0:0:0:0:0:0:1").orElse(null);
+
+        if (accessIp == null) {
+            AccessIp build = AccessIp.builder()
+                    .ipAddress("0:0:0:0:0:0:0:1")
+                    .build();
+            accessIpRepository.save(build);
+        }
     }
 
     @Transactional

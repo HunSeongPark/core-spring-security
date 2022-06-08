@@ -9,17 +9,14 @@ import com.hunseong.corespringsecurity.service.ResourcesService;
 import com.hunseong.corespringsecurity.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -72,7 +69,7 @@ public class ResourcesController {
         return "admin/resources/detail";
     }
 
-    @GetMapping(value="/admin/resources/{id}")
+    @GetMapping(value = "/admin/resources/{id}")
     public String getResources(@PathVariable Long id, Model model) {
 
         List<Role> roleList = roleService.getRoles();
@@ -86,7 +83,7 @@ public class ResourcesController {
         return "admin/resources/detail";
     }
 
-    @GetMapping(value="/admin/resources/delete/{id}")
+    @GetMapping(value = "/admin/resources/delete/{id}")
     public String removeResources(@PathVariable Long id) {
         resourcesService.deleteResources(id);
         filterInvocationSecurityMetadataSource.reload();

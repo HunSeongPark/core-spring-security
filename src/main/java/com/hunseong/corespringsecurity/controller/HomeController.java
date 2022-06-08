@@ -15,6 +15,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
+//        setupDataLoader.setupSecurityResources();
         return "home";
     }
 }
